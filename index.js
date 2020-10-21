@@ -12,19 +12,22 @@ app.post("/*", async function (req, res) {
       var rants = (await rs.rants('sort', 30)).rants.map(r => ["r" + r.id, r.text, "https://avatars.devrant.com/" + r["user_avatar"].i])
 
       res.json(create("Welcome To DevRant Bot", false, ["exit"], "reset", ["Rants", ...rants]))
-    } else if (req.body.originalDetectIntentRequest.payload.inputs[0].intent == "actions.intent.OPTION") {
+    }
+    else if (req.body.originalDetectIntentRequest.payload.inputs[0].intent == "actions.intent.OPTION") {
       var rant = await rs.rant(+q.substring(1));
       var comments = rant.comments.map(c => [c["user_username"], c.body, "https://avatars.devrant.com/" + c["user_avatar"].i]).slice(0, 30);
       res.json(create(rant.rant.text, false, ["exit"], rant.rant.id, ["Comments", ...comments], ["Rant", "https://devrant.com/rants/" + q.substring(1)]));
       //res.json(create("Go to Rant",["","","","","Open","https://devrant.com/rants/"+q.substring(1)],["exit"]));
 
-    } else {
+    }
+    else {
       var rant = await rs.rant(+q.substring(1));
       var comments = rant.comments.map(c => [c["user_username"], c.body, "https://avatars.devrant.com/" + c["user_avatar"].i]).slice(0, 30);
       res.json(create(rant.rant.text, false, ["exit"], rant.rant.id, ["Comments", ...comments], ["Rant", "https://devrant.com/rants/" + q.substring(1)]));
       //res.json(create('Could not process "'+q+'"',false,["exit"]));
     }
-  } catch (e) {
+  }
+  catch (e) {
     res.json(create("Go To DevRant For More", false, ["exit"], "", false, ["DevRant", "https://devrant.com"]));
   }
 })
